@@ -1,9 +1,8 @@
-##IROBO
+## IROBO
 
 ## To-do:
 
-1- Simulate Rosbags using Rviz; 
-
+- Use gmapping
 
 ## Goal
 
@@ -16,8 +15,12 @@ Set a Goal.
 - Bernardo Félix
 
 
-## Usage
-1. Add later
+## Vizualize Rosbags data using RVIZ
+1. rosparam set use_sim_time true
+
+2. rosbag play corredor.bag --clock
+
+3. roslaunch turtlebot3_gazebo turtlebot3_gazebo_rviz.launch
 
 ## Folders
 
