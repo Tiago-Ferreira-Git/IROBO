@@ -1,0 +1,3 @@
+[submodule "turtlebot3_datasets"]
+	path = turtlebot3_datasets
+	url = https://github.com/irob-labs-ist/turtlebot3_datasets
