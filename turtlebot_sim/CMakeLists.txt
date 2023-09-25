@@ -12,6 +12,7 @@ find_package(catkin REQUIRED COMPONENTS
   gmapping
   tf2
   robot_localization
+  turtlebot3_gazebo
 )
 
 ## System dependencies are found with CMake's conventions
@@ -106,7 +107,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES turtlebot_sim
-#  CATKIN_DEPENDS amcl gmapping tf2 robot_localization
+#  CATKIN_DEPENDS amcl gmapping tf2 robot_localization turtlebot3_gazebo
 #  DEPENDS system_lib
 )
 
