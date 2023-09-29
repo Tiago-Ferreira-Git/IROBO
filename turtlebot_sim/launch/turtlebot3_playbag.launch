@@ -69,15 +69,22 @@
   <!-- AMCL-->
 
   <!-- Groundtruth path -->
-
+  <node pkg="turtlebot_sim" type="odom_to_path.py" name="odom_to_path" required="true" />
+  <node pkg="turtlebot_sim" type="odom_ekf_to_path.py" name="odom_ekf_to_path" required="true" />
+  
   <!-- Estimated path -->
-
   <!-- Position error publisher -->
 
   <!-- rviz -->
   <!--<node pkg="rviz" type="rviz" name="rviz" required="true"/>-->
+  
   <node pkg="rviz" type="rviz" name="rviz" required="true" args="-d $(find turtlebot_sim)/rviz/turtle_sim_ekf.rviz" />
-
+    <node name="tf_to_path" pkg="tf_to_trajectory" type="tf_to_path.py">
+    <param name="parent_frame_id" value="mocap"/>
+    <param name="child_frame_id" value="mocap_laser_link"/>
+    <param name="out_topic_name" value="/ground_truth"/>
+    <param name="append_rate" value="5"/>
+  </node>
   
 
 </launch>

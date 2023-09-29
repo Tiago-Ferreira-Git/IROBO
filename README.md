@@ -2,7 +2,7 @@
 
 ## To-do:
 
-- Use gmapping
+
 
 ## Goal
 
@@ -27,4 +27,6 @@ Set a Goal.
 Explain folder - To do later
 - `images/` - IST map
 
-# Example
+## Submodule  
+
+To understand tf_to_trajectory: https://github.com/engcang/tf_to_trajectory/tree/master
