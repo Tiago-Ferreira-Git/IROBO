@@ -5,7 +5,7 @@ from tf.transformations import quaternion_from_euler
 from std_msgs.msg import String
 from nav_msgs.msg import Odometry, Path
 from geometry_msgs.msg import PoseWithCovarianceStamped, PoseStamped
-from sensor_msgs.msg import Joy
+from sensor_msgs.msg import Joy, LaserScan
 import sys
 import json
 from collections import deque
@@ -13,41 +13,56 @@ from collections import deque
 import time
 
 
+def callbackLaser(data):
+    print(data)
+
+
 def callback(data):
         global xAnt
         global yAnt
         global cont
+        
+        #print(data)
+        print(type(data))
 
-        pose = PoseStamped()
+        if type(data) is Odometry:
+            #print('Is odom')
+            
+            pose = PoseStamped()
 
-        pose.header.frame_id = "map"
-        pose.pose.position.x = float(data.pose.pose.position.x)
-        pose.pose.position.y = float(data.pose.pose.position.y)
-        pose.pose.position.z = float(data.pose.pose.position.z)
-        pose.pose.orientation.x = float(data.pose.pose.orientation.x)
-        pose.pose.orientation.y = float(data.pose.pose.orientation.y)
-        pose.pose.orientation.z = float(data.pose.pose.orientation.z)
-        pose.pose.orientation.w = float(data.pose.pose.orientation.w)
+            pose.header.frame_id = "map"
+            pose.pose.position.x = float(data.pose.pose.position.x)
+            pose.pose.position.y = float(data.pose.pose.position.y)
+            pose.pose.position.z = float(data.pose.pose.position.z)
+            pose.pose.orientation.x = float(data.pose.pose.orientation.x)
+            pose.pose.orientation.y = float(data.pose.pose.orientation.y)
+            pose.pose.orientation.z = float(data.pose.pose.orientation.z)
+            pose.pose.orientation.w = float(data.pose.pose.orientation.w)
 
-        if (xAnt != pose.pose.position.x and yAnt != pose.pose.position.y):
-                pose.header.seq = path.header.seq + 1
-                path.header.frame_id = "map"
-                path.header.stamp = rospy.Time.now()
-                pose.header.stamp = path.header.stamp
-                path.poses.append(pose)
-                # Published the msg
+            if (xAnt != pose.pose.position.x and yAnt != pose.pose.position.y):
+                    pose.header.seq = path.header.seq + 1
+                    path.header.frame_id = "map"
+                    path.header.stamp = rospy.Time.now()
+                    pose.header.stamp = path.header.stamp
+                    path.poses.append(pose)
+                    # Published the msg
 
-        cont = cont + 1
+            cont = cont + 1
 
-        rospy.loginfo("Hit: %i" % cont)
-        if cont > max_append:
-                path.poses.pop(0)
+            rospy.loginfo("Hit: %i" % cont)
+            if cont > max_append:
+                    path.poses.pop(0)
 
-        pub.publish(path)
+            pub.publish(path)
 
-        xAnt = pose.pose.orientation.x
-        yAnt = pose.pose.position.y
-        return path
+            xAnt = pose.pose.orientation.x
+            yAnt = pose.pose.position.y
+            return path
+
+        elif type(data) is LaserScan:
+            #print('Is laser')
+            pass
+
 
 
 if __name__ == '__main__':
@@ -78,7 +93,8 @@ if __name__ == '__main__':
 
         # Subscription to the required odom topic (edit accordingly)
         msg = rospy.Subscriber('/odometry/filtered', Odometry, callback)
-
+        subLaser = rospy.Subscriber('/scan', LaserScan, callback)
+        
         rate = rospy.Rate(30)  # 30hz
 
         try:
