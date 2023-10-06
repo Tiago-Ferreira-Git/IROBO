@@ -4,6 +4,7 @@
   <arg name="bag_name" default="fixed_slam_easy"/>
   <arg name="map_file" default="$(find turtlebot3_datasets)/data/map.yaml"/>
 
+
   <!-- Turtlebot3 -->
   <include file="$(find turtlebot3_bringup)/launch/turtlebot3_remote.launch">
     <arg name="model" value="$(arg model)" />
@@ -34,25 +35,22 @@
     <param name="world_frame" value="odom" />
     <param name="odom0" value="odom" />
     <param name="scan0" value="scan" />
-    
     <rosparam param="odom0_config">
       [true, true, false,
        false, false, true,
        true, true, false,
        false, false, true,
        false, false, false]</rosparam>
-       
     <param name="odom0_relative" value="true"/>
     <param name="scan0_relative" value="true"/>
     <param name="imu0" value="imu" />
-    
     <rosparam param="imu0_config">
       [false, false, false,
        false, false, true,
        false, false, false,
        false, false, true,
        false, false, false]</rosparam>
-    
+       
     <rosparam param="scan0_config">
       [true, true, false,
        false, false, true,
@@ -60,10 +58,6 @@
        false, false, false,
        false, false, false]</rosparam>
     <param name="imu0_relative" value="true"/>
-
-    
-    <param name="imu0_relative" value="true"/>
-    
     <rosparam param="initial_state">
       [-2.0,-0.5,  0.0,
        0.0,  0.0,  0.0,
@@ -73,16 +67,14 @@
   </node>
 
   <!-- AMCL-->
-  
+
   <!-- Groundtruth path -->
   <node pkg="turtlebot_sim" type="odom_to_path.py" name="odom_to_path" required="true" />
-  
-  <!-- Estimated path -->
   <node pkg="turtlebot_sim" type="odom_ekf_to_path.py" name="odom_ekf_to_path" required="true" />
   
+  <!-- Estimated path -->
   <!-- Position error publisher -->
-  
-  
+
   <!-- rviz -->
   <!--<node pkg="rviz" type="rviz" name="rviz" required="true"/>-->
   
