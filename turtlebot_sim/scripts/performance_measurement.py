@@ -1,56 +1,52 @@
 #!/usr/bin/env python3
-from __future__ import print_function
+
 import rospy
+import tf
+from geometry_msgs.msg import PoseStamped
 import numpy as np
 import scipy.io
 from nav_msgs.msg import Odometry, Path
-from geometry_msgs.msg import PoseWithCovarianceStamped, PoseStamped
-
-import time
-
 
 data_odom = np.zeros((1,2))
-data_ekf = np.zeros((1,2))
+
 data_gt = np.zeros((1,2))
 
 def callback_odom(data):
         global data_odom
-        for poses in data.poses:
-              data_odom = np.append(data_odom,[[poses.pose.position.x, poses.pose.position.y]], axis=0)
+        data_odom = np.append(data_odom,[[data.poses[0].pose.position.x, data.poses[0].pose.position.y]], axis=0)
         return data.poses
 
 
-def callback_ekf(data):
-        global data_ekf
-        for poses in data.poses:
-              data_ekf = np.append(data_ekf,[[poses.pose.position.x, poses.pose.position.y]], axis=0)
-        return data.poses
+def cb(event):
+    global data_gt
+    stamp = rospy.Time.now()
+    try:
+        listener.waitForTransform(src_frame, dst_frame, stamp,
+                                timeout=rospy.Duration(1))
+    except Exception as e:
+        rospy.logerr(e)
+        return
 
-def callback_gt(data):
-        global data_gt
-        for poses in data.poses:
-              data_gt = np.append(data_gt,[[poses.pose.position.x, poses.pose.position.y]], axis=0)
-        return data.poses
+    dst_pose = listener.lookupTransform(src_frame, dst_frame, stamp)
+    data_gt = np.append(data_gt,[[dst_pose[0][0], dst_pose[0][1]]], axis=0)
+    
 
 
 if __name__ == '__main__':
-        
-        rospy.init_node('performance_measurement')
+    rospy.init_node('tf_to_pose')
+    src_frame = rospy.get_param('~src_frame')
+    dst_frame = rospy.get_param('~dst_frame')
+    #rate = rospy.get_param('~rate', 1.)
+    listener = tf.TransformListener()
+    path = rospy.Subscriber('/path_odom', Path, callback_odom)
+    timer = rospy.Timer(rospy.Duration(1.0 / 1000), cb)
+    rate = rospy.Rate(1000)  # 50hz
 
-        path = Path() 
-        teste = PoseStamped()
-
-        # Subscription to the required odom topic (edit accordingly)
-        path = rospy.Subscriber('/path_odom', Path, callback_odom)
-        path2 = rospy.Subscriber('/path_ekf', Path, callback_ekf)
-        path3 = rospy.Subscriber('/ground_truth', Path, callback_gt)
-        rate = rospy.Rate(30)  # 30hz
-
-        try:
-            while not rospy.is_shutdown():
+    try:
+        while not rospy.is_shutdown():
                 # rospy.spin()
                 rate.sleep()
-        except rospy.ROSInterruptException:
-                scipy.io.savemat('test.mat', {'odom': data_odom,'gt': data_gt,'ekf': data_ekf})
-                print(data_odom.shape)
-                pass
+    except rospy.ROSInterruptException:
+        scipy.io.savemat('plotting_data.mat', {'ground_truth': data_gt,'odom':data_odom})
+        print(data_odom.shape)
+        pass
