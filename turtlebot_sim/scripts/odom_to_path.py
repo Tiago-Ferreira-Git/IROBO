@@ -67,7 +67,7 @@ if __name__ == '__main__':
         if not rospy.has_param("~max_list_append"):
                 rospy.logwarn('The parameter max_list_append dont exists')
         max_append = rospy.set_param("~max_list_append", 1000)
-        max_append = 1000
+        max_append = 1000000
         if not (max_append > 0):
                 rospy.logwarn('The parameter max_list_append is not correct')
                 sys.exit()

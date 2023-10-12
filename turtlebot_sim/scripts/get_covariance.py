@@ -51,33 +51,26 @@ def callback(data):
 
 
 if __name__ == '__main__':
-        # Initializing global variables
-        global xAnt
-        global yAnt
-        global cont
-        xAnt = 0.0
-        yAnt = 0.0
-        cont = 0
-
+        
         # Initializing node
-        rospy.init_node('path_plotter')
+        rospy.init_node('covariance')
 
         # Rosparams set in the launch (can ignore if running directly from bag)
         # max size of array pose msg from the path
         if not rospy.has_param("~max_list_append"):
                 rospy.logwarn('The parameter max_list_append dont exists')
         max_append = rospy.set_param("~max_list_append", 1000)
-        max_append = 1000000
+        max_append = 1000
         if not (max_append > 0):
                 rospy.logwarn('The parameter max_list_append is not correct')
                 sys.exit()
-        pub = rospy.Publisher('/path_ekf', Path, queue_size=1)
+        pub = rospy.Publisher('/path_odom', Path, queue_size=1)
 
         path = Path() 
         msg = Odometry()
 
         # Subscription to the required odom topic (edit accordingly)
-        msg = rospy.Subscriber('/odometry/filtered', Odometry, callback)
+        msg = rospy.Subscriber('/odom', Odometry, callback)
 
         rate = rospy.Rate(1000)  # 30hz
 
