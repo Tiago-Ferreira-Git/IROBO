@@ -166,7 +166,7 @@ include_directories(
 #   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 # )
 
-catkin_install_python(PROGRAMS scripts/odom_ekf_to_path.py scripts/odom_to_path.py scripts/performance_measurement.py 
+catkin_install_python(PROGRAMS scripts/odom_ekf_to_path.py scripts/odom_to_path.py scripts/performance_measurement.py scripts/get_covariance.py 
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

@@ -75,11 +75,7 @@
 
   <!-- Plotting paths with matlab-->
   <group if="$(arg mat_files)">
-    <node pkg="turtlebot_sim" type="performance_measurement.py" name="performance_measurement" required="true"  >
-      <param name="~src_frame" value="odom"/>
-      <param name="~dst_frame" value="mocap_laser_link"/>
-    </node>
-    <node pkg="turtlebot_sim" type="calculate_error.py" name="evaluation_node" required="true"   />
+    <node pkg="turtlebot_sim" type="get_covariance.py" name="get_covariance" required="true"  >
   </group>
   
   
