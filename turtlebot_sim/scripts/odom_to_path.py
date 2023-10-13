@@ -67,7 +67,7 @@ if __name__ == '__main__':
         if not rospy.has_param("~max_list_append"):
                 rospy.logwarn('The parameter max_list_append dont exists')
         max_append = rospy.set_param("~max_list_append", 1000)
-        max_append = 1000
+        max_append = 1000000
         if not (max_append > 0):
                 rospy.logwarn('The parameter max_list_append is not correct')
                 sys.exit()
@@ -79,7 +79,7 @@ if __name__ == '__main__':
         # Subscription to the required odom topic (edit accordingly)
         msg = rospy.Subscriber('/odom', Odometry, callback)
 
-        rate = rospy.Rate(30)  # 30hz
+        rate = rospy.Rate(1000)  # 30hz
 
         try:
                 while not rospy.is_shutdown():
