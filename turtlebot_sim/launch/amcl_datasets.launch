@@ -76,17 +76,17 @@
   <node pkg="tf2_ros" type="static_transform_publisher" name="tf2_mocap2map" required="true" args="0.935 1.34 -0.023 0.001 -0.003 0.737 0.676 mocap map" />
   
   <!-- Groundtruth path -->
-  <node pkg="turtlebot_sim" type="odom_to_path.py" name="odom_to_path" required="true" />
-  <node pkg="turtlebot_sim" type="odom_ekf_to_path.py" name="odom_ekf_to_path" required="true" />
+  <!-- <node pkg="turtlebot_sim" type="odom_to_path.py" name="odom_to_path" required="true" /> -->
+  <!-- <node pkg="turtlebot_sim" type="odom_ekf_to_path.py" name="odom_ekf_to_path" required="true" /> -->
+
   
-  <!--
   <node name="tf_to_path" pkg="tf_to_trajectory" type="tf_to_path.py">
     <param name="parent_frame_id" value="mocap"/>
     <param name="child_frame_id" value="mocap_laser_link"/>
     <param name="out_topic_name" value="/ground_truth"/>
     <param name="append_rate" value="5"/>
   </node>
-  -->
+  
 
   <!-- rviz -->
   <group if="$(arg open_rviz)"> 

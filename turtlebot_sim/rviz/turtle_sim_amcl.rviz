@@ -14,6 +14,7 @@ Panels:
         - /Local Map1/Costmap1
         - /Local Map1/Planner1
         - /Amcl Particles1
+        - /Path1
       Splitter Ratio: 0.5
     Tree Height: 719
   - Class: rviz/Selection
@@ -32,7 +33,7 @@ Panels:
   - Class: rviz/Time
     Name: Time
     SyncMode: 0
-    SyncSource: ""
+    SyncSource: LaserScan
 Preferences:
   PromptSaveOnExit: true
 Toolbars:
@@ -365,6 +366,30 @@ Visualization Manager:
       Topic: /amcl_pose
       Unreliable: false
       Value: true
+    - Alpha: 1
+      Buffer Length: 1
+      Class: rviz/Path
+      Color: 0; 0; 0
+      Enabled: true
+      Head Diameter: 0.30000001192092896
+      Head Length: 0.20000000298023224
+      Length: 0.30000001192092896
+      Line Style: Lines
+      Line Width: 0.029999999329447746
+      Name: Path
+      Offset:
+        X: 0
+        Y: 0
+        Z: 0
+      Pose Color: 255; 85; 255
+      Pose Style: None
+      Queue Size: 10
+      Radius: 0.029999999329447746
+      Shaft Diameter: 0.10000000149011612
+      Shaft Length: 0.10000000149011612
+      Topic: /ground_truth
+      Unreliable: false
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -388,7 +413,7 @@ Visualization Manager:
   Value: true
   Views:
     Current:
-      Angle: -1.5707963705062866
+      Angle: -1.575796365737915
       Class: rviz/TopDownOrtho
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549

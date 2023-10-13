@@ -2,6 +2,6 @@ beginner_tutorials/
 turtlebot3_simulations/
 .vscode/
 turtlebot_sim/data/sala.bag
-
-
+tf_to_trajectory/
+turtlebot3_datasets/
 .idea/
