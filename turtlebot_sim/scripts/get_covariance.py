@@ -19,11 +19,14 @@ from tf2_ros import Buffer, TransformListener
 
 
 
-data_gt = np.zeros((1,2))
+data_gt = np.zeros((1,3))
 
-data_odom = np.zeros((1,2))
+data_odom = np.zeros((1,3))
 
-data_ekf = np.zeros((1,2))
+data_ekf = np.zeros((1,3))
+
+covariance = np.zeros((1,3))
+
 
 erros = np.zeros((1,1))
 
@@ -66,12 +69,14 @@ def get_errors(transform):
 def callback(data):
         
         global data_odom
-        data_odom = np.append(data_odom,[[data.pose.pose.position.x, data.pose.pose.position.y]], axis=0)
+        data_odom = np.append(data_odom,[[data.header.stamp.to_sec(), data.pose.pose.position.x, data.pose.pose.position.y]], axis=0)
         return data
 def callback_ekf(data):
-        
+        global covariance
         global data_ekf
-        data_ekf = np.append(data_ekf,[[data.pose.pose.position.x, data.pose.pose.position.y]], axis=0)
+        print(data.pose.covariance[1],)
+        covariance = np.append(covariance,[[data.header.stamp.to_sec(), data.pose.covariance[0], data.pose.covariance[7]]], axis=0)
+        data_ekf = np.append(data_ekf,[[data.header.stamp.to_sec(), data.pose.pose.position.x, data.pose.pose.position.y]], axis=0)
         return data
 
 def cb(event):
@@ -85,7 +90,7 @@ def cb(event):
         return
 
     dst_pose = listener.lookupTransform(src_frame, dst_frame, stamp)
-    data_gt = np.append(data_gt,[[dst_pose[0][0], dst_pose[0][1]]], axis=0)
+    data_gt = np.append(data_gt,[[stamp.to_sec(), dst_pose[0][0], dst_pose[0][1]]], axis=0)
     
 
 
@@ -141,14 +146,14 @@ if __name__ == '__main__':
                     else:
                         eucl = get_errors(t)
                         erros = np.append(erros,eucl)
-                        rospy.loginfo('Error (in mm): {:.2f}'.format(eucl * 1e3))
+                        #rospy.loginfo('Error (in mm): {:.2f}'.format(eucl * 1e3))
 
                     try:
                         rate.sleep()
                     except rospy.exceptions.ROSTimeMovedBackwardsException as e:
                         rospy.logwarn(e)
         except rospy.ROSInterruptException:
-                scipy.io.savemat('plotting_data.mat', {'ekf': data_ekf,'odom':data_odom,'error':erros,'ground_truth':data_gt})
+                scipy.io.savemat('plotting_data.mat', {'ekf': data_ekf,'odom':data_odom,'error':erros,'ground_truth':data_gt,'covariance':covariance})
                 pass
     
 
