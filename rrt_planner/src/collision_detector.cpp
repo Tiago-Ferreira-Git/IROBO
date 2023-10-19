@@ -19,7 +19,7 @@ namespace rrt_planner {
             return false;
         }
         //costmap_2d::FREE_SPACE
-        if (costmap_->getCost(map_x,map_y) <= 200) {
+        if (costmap_->getCost(map_x,map_y) <= 80) {
             return true;
         } else {
             return false;
