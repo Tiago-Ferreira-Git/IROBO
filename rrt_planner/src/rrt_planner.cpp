@@ -24,8 +24,7 @@ namespace rrt_planner {
 
         // Start Node
         createNewNode(start_, -1);
-        ros::Duration tenth(0, 1000000000);
-
+        params_.step=5;
         double *p_rand, *p_new;
         Node nearest_node;
         for (unsigned int k = 1; k <= params_.max_num_nodes; k++) {
@@ -33,18 +32,8 @@ namespace rrt_planner {
             p_rand = sampleRandomPoint();
             nearest_node = nodes_[getNearestNodeId(p_rand)];
             p_new = extendTree(nearest_node.pos, p_rand); // new point and node candidate
-            //ROS_INFO("Random point %f %f ", p_rand[0], p_rand[1]);
-            //ROS_INFO("New Point  %f %f ", p_new[0], p_new[1]);
-            //ROS_INFO("Nearest vector %f %f ", nearest_node.pos[0], nearest_node.pos[1]);
             
-            //ROS_INFO("Distance %f",computeDistance(nodes_[0].pos,p_new));
-            
-            //ROS_INFO("Step %f",params_.step);
-            //ROS_INFO("Values of the vector");
 
-            //for( int i = 0; i < nodes_.size(); i++){
-            //    ROS_INFO("%f %f ", nodes_[i].pos[0], nodes_[i].pos[1]);
-            //}
             if (!collision_dect_.obstacleBetween(nearest_node.pos, p_new)) {
                 createNewNode(p_new, nearest_node.node_id);
 
@@ -58,7 +47,9 @@ namespace rrt_planner {
                     return true;
                 }
             }
-            //tenth.sleep();
+            if(computeDistance(p_new, goal_) <= params_.goal_tolerance+1){
+                params_.step=0.15;
+            }
         }
 
         return false;
