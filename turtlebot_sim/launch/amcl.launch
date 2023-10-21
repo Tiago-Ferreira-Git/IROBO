@@ -56,6 +56,7 @@
     <param name="base_frame_id"             value="base_footprint"/>
 
   </node>
+
   <!-- move_base -->
   <include file="$(find turtlebot3_navigation)/launch/move_base.launch">
     <arg name="model" value="$(arg model)" />
@@ -66,6 +67,9 @@
   <param name="/use_sim_time" value="true"/>
   <node pkg="rosbag" type="play" name="rosbag_player" 
           args="--clock --pause -r 40 $(find turtlebot_sim)/data/$(arg bag_name).bag"/>
+
+    <!-- Estimated path -->
+  <node pkg="turtlebot_sim" type="pose_cov_to_path.py" name="pose_cov_to_path" required="true" />
 
   <!-- rviz -->
   <group if="$(arg open_rviz)"> 
