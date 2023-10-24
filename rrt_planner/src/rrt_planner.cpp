@@ -24,7 +24,8 @@ namespace rrt_planner {
 
         // Start Node
         createNewNode(start_, -1);
-        params_.step=5;
+        params_.step=1;
+        params_.goal_tolerance = params_.step;
         double *p_rand, *p_new;
         Node nearest_node;
         for (unsigned int k = 1; k <= params_.max_num_nodes; k++) {
@@ -47,8 +48,9 @@ namespace rrt_planner {
                     return true;
                 }
             }
-            if(computeDistance(p_new, goal_) <= params_.goal_tolerance+1){
+            if(computeDistance(p_new, goal_) <= params_.goal_tolerance+0.3){
                 params_.step=0.15;
+                params_.goal_tolerance=params_.step;
             }
         }
 
