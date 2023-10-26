@@ -2,10 +2,10 @@
   <!-- Arguments -->
   <arg name="model" default="$(env TURTLEBOT3_MODEL)" doc="model type [burger, waffle, waffle_pi]"/>
   <!-- <arg name="bag_name" default="sala"/> -->
-      <arg name="bag_name" default="fixed_slam_easy"/>
+      <arg name="bag_name" default="4waypoints_no_obst"/>
 
   <!-- <arg name="map_file" default="$(find turtlebot_sim)/data/sala_map.yaml"/> -->
-    <arg name="map_file" default="$(find turtlebot3_datasets)/data/map.yaml"/>
+    <arg name="map_file" default="$(find turtlebot_sim)/data/mapa_sala_final.yaml"/>
 
   <arg name="open_rviz" default="true"/>
   <arg name="move_forward_only" default="false"/>
@@ -69,7 +69,7 @@
   <!-- ROSBAG -->
   <param name="/use_sim_time" value="true"/>
   <node pkg="rosbag" type="play" name="rosbag_player" 
-          args="--clock --pause -r 4 $(find turtlebot3_datasets)/data/$(arg bag_name).bag"/>
+          args="$(find turtlebot_sim)/data/$(arg bag_name).bag"/>
 
   <!-- TF -->
   <node pkg="tf2_ros" type="static_transform_publisher" name="tf2_mocap2odom" required="true" args="0.935 1.34 -0.023 0.001 -0.003 0.737 0.676 mocap odom" />
@@ -86,7 +86,8 @@
     <param name="out_topic_name" value="/ground_truth"/>
     <param name="append_rate" value="5"/>
   </node>
-  
+  <!-- Estimated path -->
+  <node pkg="turtlebot_sim" type="pose_cov_to_path.py" name="pose_cov_to_path" required="true" />
 
   <!-- rviz -->
   <group if="$(arg open_rviz)"> 
