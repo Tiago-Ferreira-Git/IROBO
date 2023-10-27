@@ -12,7 +12,7 @@ Set a Goal.
 
 - Pedro Claro
 - Tiago Ferreira
-- Bernardo Félix
+- Laura Manso
 
 
 ## Vizualize Rosbags data using RVIZ
